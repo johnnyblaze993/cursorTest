@@ -38,9 +38,18 @@ function Home() {
 				flexDirection: "column",
 				justifyContent: "center",
 				alignItems: "center",
+				height: "100vh",
+				width: "100vw",
 			}}
 		>
-			<Box sx={{ width: "100%", maxWidth: 600, textAlign: "center" }}>
+			<Box
+				sx={{
+					width: "100%",
+					maxWidth: 600,
+					textAlign: "center",
+					height: "100%",
+				}}
+			>
 				<TextField
 					label="Input Value"
 					type="number"
