@@ -36,10 +36,8 @@ function App() {
 			<Router>
 				<Box
 					sx={{
-						flexGrow: 1,
 						display: "flex",
 						flexDirection: "column",
-						alignItems: "center",
 						height: "100vh",
 						width: "100vw",
 					}}
@@ -60,12 +58,32 @@ function App() {
 							</IconButton>
 						</Toolbar>
 					</AppBar>
-					<Container sx={{ mt: 4 }}>
-						<Routes>
-							<Route path="/" element={<Home />} />
-							<Route path="/settings" element={<Settings />} />
-						</Routes>
-					</Container>
+					<Box
+						sx={{
+							flexGrow: 1,
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center",
+						}}
+					>
+						<Container
+							sx={{
+								flexGrow: 1,
+								display: "flex",
+								flexDirection: "column",
+								justifyContent: "center",
+								alignItems: "center",
+								overflow: "auto",
+								height: "100%",
+								width: "100%",
+							}}
+						>
+							<Routes>
+								<Route path="/" element={<Home />} />
+								<Route path="/settings" element={<Settings />} />
+							</Routes>
+						</Container>
+					</Box>
 				</Box>
 			</Router>
 		</ThemeProvider>

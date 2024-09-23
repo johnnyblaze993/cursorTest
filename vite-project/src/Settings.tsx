@@ -52,6 +52,7 @@ function Settings() {
 					flexDirection: "column",
 					justifyContent: "center",
 					alignItems: "center",
+					height: "100%",
 				}}
 			>
 				<Box sx={{ width: "100%", maxWidth: 600, textAlign: "center" }}>
