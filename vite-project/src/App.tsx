@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
 	AppBar,
 	Toolbar,
@@ -15,18 +14,31 @@ import {
 import { Brightness4, Brightness7 } from "@mui/icons-material";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Home from "./Home";
-
-// Define the type for the units
-type Unit = "meters" | "kilometers" | "feet" | "inches";
+import { useAppStore } from "./store";
 
 function Settings() {
-	const [darkMode, setDarkMode] = useState<boolean>(false);
-	const [primaryColor, setPrimaryColor] = useState<string>("#1976d2");
-	const [secondaryColor, setSecondaryColor] = useState<string>("#dc004e");
-	const defaultUnit: Unit = "meters"; // Example usage of the Unit type
+	const darkMode = useAppStore((state) => state.darkMode);
+	const primaryColor = useAppStore((state) => state.primaryColor);
+	const secondaryColor = useAppStore((state) => state.secondaryColor);
+	const toggleDarkMode = useAppStore((state) => state.toggleDarkMode);
+	const setPrimaryColor = useAppStore((state) => state.setPrimaryColor);
+	const setSecondaryColor = useAppStore((state) => state.setSecondaryColor);
+	const setColorScheme = useAppStore((state) => state.setColorScheme);
+	const colorScheme = useAppStore((state) => state.colorScheme);
 
-	// Example usage of defaultUnit
-	console.log(`The default unit is ${defaultUnit}`);
+	const colorSchemes = {
+		scheme1: { primary: "#1976d2", secondary: "#dc004e" },
+		scheme2: { primary: "#388e3c", secondary: "#fbc02d" },
+		scheme3: { primary: "#8e24aa", secondary: "#ff7043" },
+	};
+
+	const handleColorSchemeChange = (
+		scheme: "scheme1" | "scheme2" | "scheme3"
+	) => {
+		setColorScheme(scheme);
+		setPrimaryColor(colorSchemes[scheme].primary);
+		setSecondaryColor(colorSchemes[scheme].secondary);
+	};
 
 	const theme = createTheme({
 		palette: {
@@ -49,11 +61,7 @@ function Settings() {
 				}}
 			>
 				<Box sx={{ width: "100%", maxWidth: 600, textAlign: "center" }}>
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={() => setDarkMode(!darkMode)}
-					>
+					<Button variant="contained" color="primary" onClick={toggleDarkMode}>
 						Toggle Dark Mode
 					</Button>
 					<TextField
@@ -72,6 +80,33 @@ function Settings() {
 						fullWidth
 						margin="normal"
 					/>
+					<Box sx={{ mt: 2 }}>
+						<Typography variant="h6">Select Color Scheme</Typography>
+						<Button
+							variant="contained"
+							color={colorScheme === "scheme1" ? "primary" : "inherit"}
+							onClick={() => handleColorSchemeChange("scheme1")}
+							sx={{ m: 1 }}
+						>
+							Scheme 1
+						</Button>
+						<Button
+							variant="contained"
+							color={colorScheme === "scheme2" ? "primary" : "inherit"}
+							onClick={() => handleColorSchemeChange("scheme2")}
+							sx={{ m: 1 }}
+						>
+							Scheme 2
+						</Button>
+						<Button
+							variant="contained"
+							color={colorScheme === "scheme3" ? "primary" : "inherit"}
+							onClick={() => handleColorSchemeChange("scheme3")}
+							sx={{ m: 1 }}
+						>
+							Scheme 3
+						</Button>
+					</Box>
 				</Box>
 			</Container>
 		</ThemeProvider>
@@ -79,17 +114,18 @@ function Settings() {
 }
 
 function App() {
-	const [darkMode, setDarkMode] = useState<boolean>(false);
+	const darkMode = useAppStore((state) => state.darkMode);
+	const toggleDarkMode = useAppStore((state) => state.toggleDarkMode);
+	const primaryColor = useAppStore((state) => state.primaryColor);
+	const secondaryColor = useAppStore((state) => state.secondaryColor);
 
 	const theme = createTheme({
 		palette: {
 			mode: darkMode ? "dark" : "light",
+			primary: { main: primaryColor },
+			secondary: { main: secondaryColor },
 		},
 	});
-
-	const handleThemeChange = () => {
-		setDarkMode(!darkMode);
-	};
 
 	return (
 		<ThemeProvider theme={theme}>
@@ -116,11 +152,7 @@ function App() {
 							<Button color="inherit" component={Link} to="/settings">
 								Settings
 							</Button>
-							<IconButton
-								edge="end"
-								color="inherit"
-								onClick={handleThemeChange}
-							>
+							<IconButton edge="end" color="inherit" onClick={toggleDarkMode}>
 								{darkMode ? <Brightness7 /> : <Brightness4 />}
 							</IconButton>
 						</Toolbar>
